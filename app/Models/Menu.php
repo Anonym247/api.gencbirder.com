@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Menu extends Model
 {
@@ -23,5 +24,19 @@ class Menu extends Model
     public function children(): HasMany
     {
         return $this->hasMany(Menu::class, 'parent_id', 'id')->with('children');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($query) {
+            if ($query->parent) {
+                $parent = Menu::query()->find($query->parent)->first();
+                $query->url = $parent->url . '/' . Str::slug($query->name);
+            } else if (empty($query->url)) {
+                $query->url = Str::slug($query->name);
+            }
+        });
     }
 }

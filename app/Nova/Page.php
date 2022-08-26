@@ -2,32 +2,32 @@
 
 namespace App\Nova;
 
+use Emilianotisato\NovaTinyMCE\NovaTinyMCE;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Slug;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use NumaxLab\NovaCKEditor5Classic\CKEditor5Classic;
 
-class Menu extends Resource
+class Page extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\Menu::class;
+    public static $model = \App\Models\Page::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'title';
 
     /**
      * The columns that should be searched.
@@ -49,19 +49,23 @@ class Menu extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
 
-            BelongsTo::make('Menu', 'parent')->nullable(),
+            BelongsTo::make('Menu', 'menu'),
 
-            Text::make('Name', 'name'),
+            Select::make('Type')->options([
+                'Info' => 'info',
+                'Form' => 'form'
+            ]),
 
-            Text::make('Url', 'url')->hideWhenCreating()->hideWhenUpdating()->readonly(),
+            Text::make('Title', 'title'),
 
-            Image::make('Photo', 'photo'),
+            Text::make('Slug', 'slug')->hideWhenUpdating()->hideWhenCreating()->readonly(),
 
-            Text::make('Photo Url', 'photo_url'),
+            Image::make('Photo', 'photo')->nullable(),
 
-            Boolean::make('Is active', 'is_active'),
+            CKEditor5Classic::make('content')->withFiles('public'),
 
-            HasMany::make('Menu', 'children')
+            Text::make('Video', 'video')->nullable(),
+
         ];
     }
 
