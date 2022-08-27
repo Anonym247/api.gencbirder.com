@@ -13,7 +13,11 @@ class Menu extends Model
     use SoftDeletes;
 
     protected $hidden = [
-        'parent_id', 'is_active', 'created_at', 'updated_at', 'deleted_at'
+        'parent_id', 'is_active', 'created_at', 'updated_at', 'deleted_at', 'photo'
+    ];
+
+    protected $appends = [
+        'media'
     ];
 
     public function parent(): BelongsTo
@@ -24,6 +28,11 @@ class Menu extends Model
     public function children(): HasMany
     {
         return $this->hasMany(Menu::class, 'parent_id', 'id')->with('children');
+    }
+
+    public function getMediaAttribute(): ?string
+    {
+        return photoToMedia($this->getAttribute('photo'));
     }
 
     protected static function boot()
