@@ -19,8 +19,8 @@ class Slider extends Model
         return $this->hasMany(SliderImage::class);
     }
 
-    public function getAttachmentMediaAttribute(): string
+    public function getAttachmentMediaAttribute(): ?string
     {
-        return env('APP_URL') . '/storage/' . $this->attachment_photo;
+        return photoToMedia($this->getAttribute('attachment_photo'));
     }
 }

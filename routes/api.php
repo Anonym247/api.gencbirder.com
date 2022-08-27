@@ -19,4 +19,6 @@ Route::group(['prefix' => 'client'], function () {
     Route::get('pages', [App\Http\Controllers\PageController::class, 'index']);
     Route::get('slider', [App\Http\Controllers\ContentController::class, 'slider']);
     Route::get('stats', [App\Http\Controllers\ContentController::class, 'stats']);
+    Route::get('activities', [App\Http\Controllers\ContentController::class, 'activities']);
+    Route::get('news', [App\Http\Controllers\ContentController::class, 'news']);
 });

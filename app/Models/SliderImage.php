@@ -19,6 +19,6 @@ class SliderImage extends Model
 
     public function getMediaAttribute(): string
     {
-        return env('APP_URL') . '/storage/' . $this->photo;
+        return photoToMedia($this->getAttribute('photo'));
     }
 }
