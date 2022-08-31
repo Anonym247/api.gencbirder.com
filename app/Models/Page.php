@@ -13,7 +13,7 @@ class Page extends Model
     use SoftDeletes;
 
     protected $hidden = [
-        'menu_id', 'created_at, updated_at', 'deleted_at',
+        'id', 'menu_id', 'created_at, updated_at', 'deleted_at',
     ];
 
     public function menu(): BelongsTo
