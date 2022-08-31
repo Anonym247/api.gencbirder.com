@@ -34,7 +34,7 @@ class Page extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'id', 'type', 'title', 'slug',
     ];
 
     /**
@@ -48,9 +48,9 @@ class Page extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
 
-            BelongsTo::make('Menu', 'menu')->nullable(),
+            BelongsTo::make('Menu', 'menu')->nullable()->searchable(),
 
-            Boolean::make('Is for menu ?', 'is_for_menu')->default(1),
+            Boolean::make('Is for menu ?', 'is_for_menu')->default(1)->hideFromIndex(),
 
             Select::make('Type')->options([
                 'Info' => 'info',
@@ -70,13 +70,13 @@ class Page extends Resource
 
             Text::make('Video', 'video')->nullable(),
 
-            Image::make('Banner Photo', 'banner_photo')->nullable(),
+            Image::make('Banner Photo', 'banner_photo')->nullable()->hideFromIndex(),
 
-            Image::make('Attachment Photo', 'attachment_photo')->nullable(),
+            Image::make('Attachment Photo', 'attachment_photo')->nullable()->hideFromIndex(),
 
-            Text::make('Attachment Url', 'attachment_url')->nullable(),
+            Text::make('Attachment Url', 'attachment_url')->nullable()->hideFromIndex(),
 
-            BelongsToMany::make('Related Pages', 'relatedPages', 'App\Nova\Page'),
+            BelongsToMany::make('Related Pages', 'relatedPages', 'App\Nova\Page')->hideFromIndex(),
         ];
     }
 
