@@ -22,9 +22,9 @@ class PageController extends Controller
             'slug' => 'required|string'
         ]);
 
-        $slug = $request->get('slug');
+        $slug = trim($request->get('slug'), '/\\&?');
 
-        $page = Page::query()->where('slug', $slug)->first();
+        $page = Page::query()->where('slug', $slug)->with('relatedPages:slug,title')->first();
 
         if (!$page) {
             if ($slug = $this->slugOfNews($slug)) {
@@ -46,6 +46,18 @@ class PageController extends Controller
                 'type' => $page->type,
                 'photo' => photoToMedia($page->photo),
                 'items' => $members,
+                'related' => $page->relatedPages,
+            ]);
+        }
+
+        if ($page->type === 'banner') {
+            return $this->data(__('messages.banner'), [
+                'type' => 'banner',
+                'title' => $page->title,
+                'banner' => photoToMedia($page->banner_photo),
+                'attachment_photo' => photoToMedia($page->attachment_photo),
+                'attachment_url' => $page->attachment_url,
+                'related' => $page->relatedPages,
             ]);
         }
 
@@ -56,6 +68,7 @@ class PageController extends Controller
                 'type' => $page->type,
                 'photo' => photoToMedia($page->photo),
                 'items' => $reportGroups,
+                'related' => $page->relatedPages,
             ]);
         }
 
@@ -68,6 +81,7 @@ class PageController extends Controller
                 'content' => $page->content,
                 'video' => $page->video,
             ],
+            'related' => $page->relatedPages,
         ]);
     }
 

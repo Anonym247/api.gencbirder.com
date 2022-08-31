@@ -56,4 +56,12 @@ abstract class Resource extends NovaResource
     {
         return parent::relatableQuery($request, $query);
     }
+
+    /**
+     * @return false
+     */
+    public static function softDeletes()
+    {
+        return false;
+    }
 }
