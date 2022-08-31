@@ -24,65 +24,73 @@ class PageController extends Controller
 
         $slug = trim($request->get('slug'), '/\\&?');
 
-        $page = Page::query()->where('slug', $slug)->with('relatedPages:slug,title')->first();
+        $page = Page::query()
+            ->where('slug', $slug)
+            ->with('relatedPages:slug,title')
+            ->first();
 
         if (!$page) {
             if ($slug = $this->slugOfNews($slug)) {
-                $news = News::query()->where('is_active', true)->where('slug', $slug)->firstOrFail();
+                $news = News::query()
+                    ->where('is_active', true)
+                    ->where('slug', $slug)
+                    ->firstOrFail(['title', 'content', 'cover', 'created_at']);
 
-                return $this->data(__('messages.news'), [
+                return $this->data(__('messages.show'), [
                     'type' => "news",
-                    'values' => $news,
+                    'news' => $news,
                 ]);
             }
 
             return $this->error(__('messages.page_not_found'), 404);
         }
 
-        if ($page->type === 'team') {
-            $members = $pageService->getMembersTree($page->getKey());
-
-            return $this->data(__('messages.members'), [
-                'type' => $page->type,
-                'photo' => photoToMedia($page->photo),
-                'items' => $members,
-                'related' => $page->relatedPages,
+        if ($page->type !== "reports") {
+            $page->load([
+                'documents' => function ($query) {
+                    $query->where('report_groups.is_active', 1);
+                    $query->where('reports.is_active', 1);
+                    $query->select(['reports.title', 'reports.file']);
+                }
             ]);
         }
 
+        $defaultData = [
+            'type' => $page->type,
+            'title' => $page->title,
+            'photo' => photoToMedia($page->photo),
+            'related' => $page->relatedPages,
+            'documents' => $page->relationLoaded('documents') ? $page->documents : [],
+        ];
+
+        if ($page->type === 'team') {
+            $members = $pageService->getMembersTree($page->getKey());
+
+            return $this->data(__('messages.list'), array_merge($defaultData, [
+                'items' => $members
+            ]));
+        }
+
         if ($page->type === 'banner') {
-            return $this->data(__('messages.banner'), [
-                'type' => 'banner',
-                'title' => $page->title,
+            return $this->data(__('messages.show'), array_merge($defaultData, [
                 'banner' => photoToMedia($page->banner_photo),
                 'attachment_photo' => photoToMedia($page->attachment_photo),
                 'attachment_url' => $page->attachment_url,
-                'related' => $page->relatedPages,
-            ]);
+            ]));
         }
 
         if ($page->type === 'reports') {
             $reportGroups = $pageService->getReportGroups($page->getKey());
 
-            return $this->data(__('messages.list'), [
-                'type' => $page->type,
-                'photo' => photoToMedia($page->photo),
+            return $this->data(__('messages.list'), array_merge($defaultData, [
                 'items' => $reportGroups,
-                'related' => $page->relatedPages,
-            ]);
+            ]));
         }
 
-        return $this->data(__('messages.success'), [
-            'type' => $page->type,
-            'values' => [
-                'slug' => $page->slug,
-                'title' => $page->title,
-                'photo' => photoToMedia($page->photo),
-                'content' => $page->content,
-                'video' => $page->video,
-            ],
-            'related' => $page->relatedPages,
-        ]);
+        return $this->data(__('messages.list'), array_merge($defaultData, [
+            'content' => $page->content,
+            'video' => $page->video,
+        ]));
     }
 
     private function slugOfNews($slug): ?string

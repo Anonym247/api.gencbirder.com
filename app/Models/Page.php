@@ -49,4 +49,14 @@ class Page extends Model
             'id'
         );
     }
+
+    public function documents()
+    {
+        return $this->hasManyThrough(
+            Report::class,
+            ReportGroup::class,
+            'page_id',
+            'report_group_id'
+        );
+    }
 }
