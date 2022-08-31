@@ -40,9 +40,14 @@ class ContentController extends Controller
 
     public function news(Request $request)
     {
-        $news = News::query()->where('is_active', 1)->get();
+        $news = News::query()->where('is_active', 1)->get(['slug', 'title', 'cover', 'created_at']);
+
+        $news = $news->map(function ($news) {
+            $news->url = config('defaults.news_prefix') . '/' . $news->slug;
+
+            return $news;
+        });
 
         return $this->data(__('messages.news'), $news);
-
     }
 }

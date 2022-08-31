@@ -13,20 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('pages', function (Blueprint $table) {
+        Schema::create('member_groups', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('menu_id')->nullable();
-            $table->enum('type', ['info', 'form', 'team', 'reports']);
-            $table->string('slug');
-            $table->string('title');
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->string('photo')->nullable();
-            $table->text('content')->nullable();
-            $table->string('video')->nullable();
+            $table->string('name');
+            $table->string('role');
+            $table->string('email')->nullable();
+            $table->boolean('is_active')->default(0);
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['menu_id', 'slug']);
-            $table->foreign('menu_id')->references('id')->on('menus');
+            $table->foreign('parent_id')->references('id')->on('member_groups');
         });
     }
 
@@ -37,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pages');
+        Schema::dropIfExists('member_groups');
     }
 };
