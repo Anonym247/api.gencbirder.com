@@ -5,27 +5,26 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\File;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class MemberGroup extends Resource
+class Report extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\MemberGroup::class;
+    public static $model = \App\Models\Report::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'role';
+    public static $title = 'id';
 
     /**
      * The columns that should be searched.
@@ -33,7 +32,7 @@ class MemberGroup extends Resource
      * @var array
      */
     public static $search = [
-        'name', 'role'
+        'title',
     ];
 
     /**
@@ -47,21 +46,13 @@ class MemberGroup extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
 
-            BelongsTo::make('Parent', 'parent', 'App\Nova\MemberGroup')->nullable(),
+            BelongsTo::make('Group', 'group', 'App\Nova\ReportGroup'),
 
-            BelongsTo::make('Page', 'page', 'App\Nova\Page')->nullable(),
+            Text::make('Title', 'title'),
 
-            Image::make('Parent Photo', 'photo')->nullable(),
+            File::make('File', 'file'),
 
-            Text::make('Name', 'name')->required(),
-
-            Text::make('Role', 'role')->required(),
-
-            Text::make('Email', 'email')->nullable(),
-
-            Boolean::make('Is active', 'is_active')->default(true),
-
-            HasMany::make('Members', 'children', 'App\Nova\MemberGroup'),
+            Boolean::make('Is active', 'is_active'),
         ];
     }
 

@@ -5,20 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class MemberGroup extends Model
+class ReportGroup extends Model
 {
     use SoftDeletes;
 
     protected $guarded = ['id'];
 
-    public function parent()
-    {
-        return $this->belongsTo(MemberGroup::class, 'parent_id', 'id');
-    }
+    protected $hidden = ['id'];
 
-    public function children()
+    public function reports()
     {
-        return $this->hasMany(MemberGroup::class, 'parent_id', 'id');
+        return $this->hasMany(Report::class, 'report_group_id', 'id');
     }
 
     public function page()

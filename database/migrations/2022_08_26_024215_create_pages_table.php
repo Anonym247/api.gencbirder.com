@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('menu_id')->nullable();
-            $table->enum('type', ['info', 'form', 'team', 'reports']);
+            $table->enum('type', ['info', 'form', 'team', 'reports', 'banner']);
             $table->string('slug');
             $table->string('title');
             $table->string('photo')->nullable();
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->unique(['menu_id', 'slug']);
+            $table->unique(['menu_id', 'slug', 'deleted_at']);
             $table->foreign('menu_id')->references('id')->on('menus');
         });
     }

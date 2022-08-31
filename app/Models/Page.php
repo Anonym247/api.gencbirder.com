@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
@@ -13,7 +14,7 @@ class Page extends Model
     use SoftDeletes;
 
     protected $hidden = [
-        'menu_id', 'created_at, updated_at', 'deleted_at',
+        'id', 'menu_id', 'created_at', 'updated_at', 'deleted_at', 'pivot'
     ];
 
     public function menu(): BelongsTo
@@ -26,9 +27,26 @@ class Page extends Model
         parent::boot();
 
         static::saving(function ($query) {
-            $menu = Menu::query()->find($query->menu)->first();
+            if ($query->menu) {
+                $menu = Menu::query()->find($query->menu)->first();
 
-            $query->slug = $menu->url . '/' . Str::slug($query->title);
+                if ($query->is_for_menu) {
+                    $query->slug = $menu->url;
+                } else {
+                    $query->slug = $menu->url . '/' . Str::slug($query->title);
+                }
+            }
         });
+    }
+
+    public function relatedPages(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Page::class,
+            'page_pivot',
+            'page_id',
+            'related_page_id',
+            'id'
+        );
     }
 }
