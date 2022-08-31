@@ -12,7 +12,10 @@ class MenuController extends Controller
 
     public function index(Request $request)
     {
-        $menus = Menu::with('children')->where('is_active', 1)->get();
+        $menus = Menu::with('children')
+            ->whereNull('parent_id')
+            ->where('is_active', 1)
+            ->get();
 
         return $this->data(__('messages.list'), $menus);
     }
