@@ -2,15 +2,14 @@
 
 namespace App\Nova;
 
-use Emilianotisato\NovaTinyMCE\NovaTinyMCE;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Select;
-use Laravel\Nova\Fields\Slug;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use NumaxLab\NovaCKEditor5Classic\CKEditor5Classic;
 
 class Page extends Resource
@@ -49,14 +48,17 @@ class Page extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
 
-            BelongsTo::make('Menu', 'menu'),
+            BelongsTo::make('Menu', 'menu')->nullable(),
+
+            Boolean::make('Is for menu ?', 'is_for_menu')->default(1),
 
             Select::make('Type')->options([
                 'Info' => 'info',
                 'Form' => 'form',
                 'Team' => 'team',
                 'Reports' => 'reports',
-            ]),
+                'Banner' => 'banner',
+            ])->required(),
 
             Text::make('Title', 'title'),
 
@@ -68,6 +70,13 @@ class Page extends Resource
 
             Text::make('Video', 'video')->nullable(),
 
+            Image::make('Banner Photo', 'banner_photo')->nullable(),
+
+            Image::make('Attachment Photo', 'attachment_photo')->nullable(),
+
+            Text::make('Attachment Url', 'attachment_url')->nullable(),
+
+            BelongsToMany::make('Related Pages', 'relatedPages', 'App\Nova\Page'),
         ];
     }
 
