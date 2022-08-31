@@ -11,7 +11,7 @@ class Report extends Model
 
     protected $guarded = ['id'];
 
-    protected $hidden = ['report_group_id', 'file'];
+    protected $hidden = ['report_group_id', 'file', 'laravel_through_key'];
 
     protected $appends = [
         'url'
