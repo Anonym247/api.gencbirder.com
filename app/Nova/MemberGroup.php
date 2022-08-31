@@ -49,6 +49,8 @@ class MemberGroup extends Resource
 
             BelongsTo::make('Parent', 'parent', 'App\Nova\MemberGroup')->nullable(),
 
+            BelongsTo::make('Page', 'page', 'App\Nova\Page')->nullable(),
+
             Image::make('Parent Photo', 'photo')->nullable(),
 
             Text::make('Name', 'name')->required(),

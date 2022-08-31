@@ -13,19 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('member_groups', function (Blueprint $table) {
+        Schema::create('report_groups', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('page_id')->nullable();
-            $table->unsignedBigInteger('parent_id')->nullable();
-            $table->string('photo')->nullable();
-            $table->string('name');
-            $table->string('role');
-            $table->string('email')->nullable();
-            $table->boolean('is_active')->default(0);
+            $table->string('title');
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('parent_id')->references('id')->on('member_groups');
             $table->foreign('page_id')->references('id')->on('pages');
         });
     }
@@ -37,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('member_groups');
+        Schema::dropIfExists('report_groups');
     }
 };
