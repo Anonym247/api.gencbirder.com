@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Text;
@@ -23,7 +24,7 @@ class Activity extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -31,7 +32,7 @@ class Activity extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'name',
     ];
 
     /**
@@ -52,6 +53,8 @@ class Activity extends Resource
             Text::make('URL', 'url'),
 
             Color::make('Color', 'bgcolor')->compact(),
+
+            Boolean::make('Is active', 'is_active')->default(1),
         ];
     }
 

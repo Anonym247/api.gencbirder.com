@@ -2,16 +2,14 @@
 
 namespace App\Nova;
 
+use App\Nova\Filters\MenuByParent;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Image;
-use Laravel\Nova\Fields\Slug;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Menu extends Resource
 {
@@ -49,19 +47,19 @@ class Menu extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
 
-            BelongsTo::make('Menu', 'parent')->nullable(),
+            BelongsTo::make('Parent', 'parent', 'App\Nova\Menu')->nullable(),
 
             Text::make('Name', 'name'),
 
             Text::make('Url', 'url')->hideWhenCreating()->hideWhenUpdating()->readonly(),
 
-            Image::make('Photo', 'photo'),
+            Image::make('Photo', 'photo')->hideFromIndex(),
 
-            Text::make('Photo Url', 'photo_url'),
+            Text::make('Photo Url', 'photo_url')->hideFromIndex(),
 
             Boolean::make('Is active', 'is_active'),
 
-            HasMany::make('Menu', 'children')
+            HasMany::make('Menu', 'children'),
         ];
     }
 
@@ -84,7 +82,11 @@ class Menu extends Resource
      */
     public function filters(Request $request)
     {
-        return [];
+        return [
+            (new MenuByParent())->canSee(function () use ($request) {
+                return is_null($request->viaResourceId);
+            })
+        ];
     }
 
     /**

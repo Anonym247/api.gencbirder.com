@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class MainBanner extends Model
+class UserAddressType extends Model
 {
     use SoftDeletes;
 
     protected $guarded = ['id'];
 
-    protected $hidden = ['id', 'is_active', 'created_at', 'updated_at', 'deleted_at'];
+    protected $hidden = ['is_active', 'created_at', 'updated_at', 'deleted_at'];
 }

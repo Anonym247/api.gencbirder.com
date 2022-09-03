@@ -3,30 +3,26 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Image;
-use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
-use NumaxLab\NovaCKEditor5Classic\CKEditor5Classic;
 
-class Page extends Resource
+class Province extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\Page::class;
+    public static $model = \App\Models\Province::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'title';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -34,7 +30,7 @@ class Page extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'type', 'title', 'slug',
+        'name',
     ];
 
     /**
@@ -48,35 +44,11 @@ class Page extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
 
-            BelongsTo::make('Menu', 'menu')->nullable()->searchable(),
+            Text::make('Name', 'name'),
 
-            Boolean::make('Is for menu ?', 'is_for_menu')->default(1)->hideFromIndex(),
+            Boolean::make('Is active', 'is_active')->default(1),
 
-            Select::make('Type')->options([
-                'Info' => 'info',
-                'Form' => 'form',
-                'Team' => 'team',
-                'Reports' => 'reports',
-                'Banner' => 'banner',
-            ])->required(),
-
-            Text::make('Title', 'title'),
-
-            Text::make('Slug', 'slug')->hideWhenUpdating()->hideWhenCreating()->readonly(),
-
-            Image::make('Photo', 'photo')->nullable(),
-
-            CKEditor5Classic::make('content')->withFiles('public'),
-
-            Text::make('Video', 'video')->nullable(),
-
-            Image::make('Banner Photo', 'banner_photo')->nullable()->hideFromIndex(),
-
-            Image::make('Attachment Photo', 'attachment_photo')->nullable()->hideFromIndex(),
-
-            Text::make('Attachment Url', 'attachment_url')->nullable()->hideFromIndex(),
-
-            BelongsToMany::make('Related Pages', 'relatedPages', 'App\Nova\Page')->hideFromIndex(),
+            HasMany::make('Districts', 'districts', 'App\Nova\District'),
         ];
     }
 

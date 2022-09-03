@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\MainBanner;
 use App\Models\News;
 use App\Models\Slider;
 use App\Models\Stat;
@@ -21,7 +22,12 @@ class ContentController extends Controller
             }
         ])->first();
 
-        return $this->data(__('messages.slider'), $slider);
+        $mainBanner = MainBanner::query()->where('is_active', 1)->first();
+
+        return $this->data(__('messages.slider'), [
+            'slider' => $slider,
+            'main_banner' => $mainBanner
+        ]);
     }
 
     public function stats(Request $request)
