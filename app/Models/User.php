@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -23,6 +24,11 @@ class User extends Authenticatable
         'lastname',
         'email',
         'password',
+        'sex',
+        'birthday',
+        'province_id',
+        'district_id',
+        'phone',
     ];
 
     /**
@@ -33,6 +39,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'firstname',
+        'lastname',
+        'province_id',
+        'district_id',
+    ];
+
+    protected $appends = [
+        'name'
     ];
 
     /**
@@ -43,4 +57,29 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims(): array
+    {
+        return [];
+    }
+
+    public function getNameAttribute(): string
+    {
+        return $this->getAttribute('firstname') . ' ' . $this->getAttribute('lastname');
+    }
+
+    public function province(): BelongsTo
+    {
+        return $this->belongsTo(Province::class, 'province_id', 'id');
+    }
+
+    public function district(): BelongsTo
+    {
+        return $this->belongsTo(District::class, 'district_id', 'id');
+    }
 }

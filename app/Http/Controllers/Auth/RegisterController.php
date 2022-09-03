@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Traits\ApiResponder;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,6 +27,7 @@ class RegisterController extends Controller
     */
 
     use RegistersUsers;
+    use ApiResponder;
 
     /**
      * Where to redirect users after registration.
@@ -41,6 +46,21 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        $this->guard()->login($user);
+
+        if ($response = $this->registered($request, $user)) {
+            return $response;
+        }
+
+        return $this->success(__('messages.success'), 201);
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -52,7 +72,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:8'],
         ]);
     }
 
@@ -60,12 +80,16 @@ class RegisterController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return \App\Models\User
+     * @return User
      */
-    protected function create(array $data)
+    protected function create(array $data): User
     {
+        [$firstname, $lastname] = explode(' ', $data['name']);
+
         return User::create([
-            'name' => $data['name'],
+            'role_id' => Role::VOLUNTEER,
+            'firstname' => $firstname,
+            'lastname' => $lastname,
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
