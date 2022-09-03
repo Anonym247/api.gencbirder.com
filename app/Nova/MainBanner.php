@@ -7,6 +7,7 @@ use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use NumaxLab\NovaCKEditor5Classic\CKEditor5Classic;
 
 class MainBanner extends Resource
 {
@@ -46,7 +47,7 @@ class MainBanner extends Resource
 
             Text::make('Title', 'title'),
 
-            Text::make('Description', 'description'),
+            Text::make('Description', 'description')->hideFromIndex(),
 
             Text::make('Link title', 'link_title'),
 

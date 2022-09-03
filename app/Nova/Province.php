@@ -4,20 +4,18 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
-use Timothyasp\Color\Color;
 
-class Activity extends Resource
+class Province extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\Activity::class;
+    public static $model = \App\Models\Province::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -48,13 +46,9 @@ class Activity extends Resource
 
             Text::make('Name', 'name'),
 
-            Image::make('Icon', 'icon'),
-
-            Text::make('URL', 'url'),
-
-            Color::make('Color', 'bgcolor')->compact(),
-
             Boolean::make('Is active', 'is_active')->default(1),
+
+            HasMany::make('Districts', 'districts', 'App\Nova\District'),
         ];
     }
 
