@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\District;
+use App\Models\EducationStatus;
 use App\Models\Province;
 use App\Models\Quarter;
 use App\Traits\ApiResponder;
@@ -44,5 +45,16 @@ class ReferenceController extends Controller
             ->get(['id', 'district_id', 'name']);
 
         return $this->data(__('messages.list'), $quarters);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function educationStatuses(Request $request): JsonResponse
+    {
+        $educationStatuses = EducationStatus::query()->where('is_active', 1)->get(['id', 'name']);
+
+        return $this->data(__('messages.saved'), $educationStatuses);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Resources\MembersResource;
+use App\Models\Form;
 use App\Models\MemberGroup;
 use App\Models\ReportGroup;
 use Illuminate\Database\Eloquent\Collection;
@@ -33,5 +34,12 @@ class PageService
         $resource = MembersResource::collection($items)->response()->getData(true);
 
         return $resource['data'] ?? [];
+    }
+
+    public function getForm(int $pageId)
+    {
+        $form = Form::with('sections.attributes')->where('page_id', $pageId)->firstOrFail();
+
+        return $form;
     }
 }

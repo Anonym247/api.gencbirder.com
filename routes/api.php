@@ -31,6 +31,7 @@ Route::group(['prefix' => 'client'], function () {
         Route::get('provinces', [App\Http\Controllers\ReferenceController::class, 'provinces']);
         Route::get('provinces/{id}/districts', [App\Http\Controllers\ReferenceController::class, 'districts']);
         Route::get('districts/{id}/quarters', [App\Http\Controllers\ReferenceController::class, 'quarters']);
+        Route::get('educationStatuses', [App\Http\Controllers\ReferenceController::class, 'educationStatuses']);
     });
 
     Route::group(['middleware' => 'auth:api'], function () {

@@ -6,6 +6,7 @@ use App\Models\News;
 use App\Models\Page;
 use App\Services\PageService;
 use App\Traits\ApiResponder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -16,7 +17,7 @@ class PageController extends Controller
     /**
      * @throws ValidationException
      */
-    public function index(Request $request, PageService $pageService)
+    public function index(Request $request, PageService $pageService): JsonResponse
     {
         $this->validate($request, [
             'slug' => 'required|string'
@@ -62,6 +63,14 @@ class PageController extends Controller
             'related' => $page->relatedPages,
             'documents' => $page->relationLoaded('documents') ? $page->documents : [],
         ];
+
+        if ($page->type === 'form') {
+            $form = $pageService->getForm($page->getKey());
+
+            return $this->data(__('messages.list'), array_merge($defaultData, [
+                'form' => $form
+            ]));
+        }
 
         if ($page->type === 'team') {
             $members = $pageService->getMembersTree($page->getKey());

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "59d8e06a1f9e0970fccfe905be6c4a28",
+    "content-hash": "8e24181c5a16e930135ac4b8ba4a2af7",
     "packages": [
         {
             "name": "brick/math",
@@ -126,6 +126,52 @@
                 }
             ],
             "time": "2021-10-10T11:59:43+00:00"
+        },
+        {
+            "name": "bytelaunch/readonly-on-update",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mi-ke-dev/nova-readonlyonupdate.git",
+                "reference": "da82d10a7793a9f2b07cb8dfef7459716a07dfb8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mi-ke-dev/nova-readonlyonupdate/zipball/da82d10a7793a9f2b07cb8dfef7459716a07dfb8",
+                "reference": "da82d10a7793a9f2b07cb8dfef7459716a07dfb8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Bytelaunch\\ReadonlyOnUpdate\\ToolServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Bytelaunch\\ReadonlyOnUpdate\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova tool.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/mi-ke-dev/nova-readonlyonupdate/issues",
+                "source": "https://github.com/mi-ke-dev/nova-readonlyonupdate/tree/main"
+            },
+            "time": "2020-11-21T00:10:10+00:00"
         },
         {
             "name": "cakephp/chronos",
@@ -260,6 +306,51 @@
                 "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.1"
             },
             "time": "2021-08-13T13:06:58+00:00"
+        },
+        {
+            "name": "dillingham/nova-items-field",
+            "version": "0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dillingham/nova-items-field.git",
+                "reference": "c93dc293cecee867111cb27ad79b3daad5f77682"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dillingham/nova-items-field/zipball/c93dc293cecee867111cb27ad79b3daad5f77682",
+                "reference": "c93dc293cecee867111cb27ad79b3daad5f77682",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "NovaItemsField\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "NovaItemsField\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Nova field to handle array columns",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/dillingham/nova-items-field/issues",
+                "source": "https://github.com/dillingham/nova-items-field/tree/0.6"
+            },
+            "time": "2020-09-16T21:22:17+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -894,6 +985,51 @@
                 }
             ],
             "time": "2022-06-18T20:57:19+00:00"
+        },
+        {
+            "name": "epartment/nova-dependency-container",
+            "version": "1.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/epartment/nova-dependency-container.git",
+                "reference": "da1490d015754d2aa7fd0815ad91d54b279472d7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/epartment/nova-dependency-container/zipball/da1490d015754d2aa7fd0815ad91d54b279472d7",
+                "reference": "da1490d015754d2aa7fd0815ad91d54b279472d7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Epartment\\NovaDependencyContainer\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Epartment\\NovaDependencyContainer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova field container allowing to depend on other fields values",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/epartment/nova-dependency-container/issues",
+                "source": "https://github.com/epartment/nova-dependency-container/tree/1.3.3"
+            },
+            "time": "2021-05-13T16:30:53+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -8923,7 +9059,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "bytelaunch/readonly-on-update": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
